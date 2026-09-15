@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Freestyle Script";
+  src: url("/fonts/FREESCPT.TTF") format("truetype");
+  font-display: swap;
+}
+
+@theme {
+  --font-script: var(--font-great-vibes), "Great Vibes", cursive;
+  --font-subtitle: "Freestyle Script", "Brush Script MT", cursive;
+  --font-ampersand: var(--font-kranky), "Kranky", serif;
+  --font-body: var(--font-gowun-batang), "Gowun Batang", serif;
+
+  --color-cream: #f9f3e7;
+  --color-burgundy: #a8374e;
+  --color-warm-gray: #70706e;
+  --color-olive: #667659;
+  --color-olive-dark: #4a5840;
+  --color-sage: #9b9b6d;
+  --color-ash: #988f98;
+
+  --radius-button: 10px;
+}
+
+body {
+  font-family: var(--font-body);
+}
