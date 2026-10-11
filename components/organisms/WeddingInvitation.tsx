@@ -7,6 +7,8 @@ import Button from "@/components/atoms/Button";
 import BackgroundLayers from "@/components/atoms/BackgroundLayers";
 import BrideGroom from "@/components/organisms/BrideGroom";
 import WeddingEvent from "@/components/organisms/WeddingEvent";
+import WeddingGift from "@/components/organisms/WeddingGift";
+import Wishes from "@/components/organisms/Wishes";
 
 export default function WeddingInvitation() {
   return (
@@ -45,6 +47,10 @@ export default function WeddingInvitation() {
       <BrideGroom />
 
       <WeddingEvent />
+
+      <WeddingGift />
+
+      <Wishes />
     </main>
   );
 }

@@ -30,13 +30,13 @@ export default function WeddingEvent() {
                 variant="body-bold"
                 className="text-[34px] leading-none text-olive-dark tracking-[-0.02em] lg:text-[44px]"
               >
-                26.
+                29.
               </Typography>
               <Typography
                 variant="body-bold"
                 className="text-[34px] leading-none text-olive-dark tracking-[-0.02em] lg:text-[44px]"
               >
-                07.
+                11.
               </Typography>
               <Typography
                 variant="body-bold"

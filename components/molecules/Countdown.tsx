@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Typography from "@/components/atoms/Typography";
 
-const TARGET = new Date("2026-10-26T09:00:00+07:00").getTime();
+const TARGET = new Date("2026-11-29T09:00:00+07:00").getTime();
 
 function diff() {
   const ms = Math.max(0, TARGET - Date.now());
