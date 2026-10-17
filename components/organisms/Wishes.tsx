@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Typography from "@/components/atoms/Typography";
+import Reveal from "@/components/atoms/Reveal";
 
 interface WishItem {
   id: string;
@@ -70,6 +71,7 @@ export default function Wishes() {
       id="wishes"
       className="relative flex w-full flex-col items-center gap-8 px-6 py-16 sm:px-10 sm:py-24 lg:px-16 lg:py-32 xl:px-24"
     >
+      <Reveal variant="blur" className="flex w-full flex-col items-center gap-8">
       <div className="flex flex-col items-center gap-4 text-center">
         <Typography
           variant="body-bold"
@@ -88,7 +90,9 @@ export default function Wishes() {
           Quis purus vitae eu maecenas non dolor.
         </Typography>
       </div>
+      </Reveal>
 
+      <Reveal variant="blur" className="flex w-full justify-center" delay={150}>
       <form
         onSubmit={handleSubmit}
         className="flex w-full max-w-[340px] flex-col gap-4 sm:max-w-[420px] lg:max-w-[500px]"
@@ -128,7 +132,9 @@ export default function Wishes() {
           </span>
         </button>
       </form>
+      </Reveal>
 
+      <Reveal variant="blur" className="flex w-full justify-center" delay={300}>
       <div className="flex w-full max-w-[340px] flex-col gap-3.5 sm:max-w-[420px] lg:max-w-[500px]">
         {wishesList.map((item) => (
           <div
@@ -144,12 +150,15 @@ export default function Wishes() {
           </div>
         ))}
       </div>
+      </Reveal>
 
+      <Reveal variant="blur" className="mt-6 flex w-full justify-center" delay={450}>
       <img
         src="/assets/gan-hani.svg"
         alt="Gan & Hani"
-        className="mt-6 h-auto w-full max-w-[203px] lg:max-w-[280px]"
+        className="h-auto w-full max-w-[203px] lg:max-w-[280px]"
       />
+      </Reveal>
     </section>
   );
 }
