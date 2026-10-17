@@ -38,7 +38,9 @@ export default function Countdown() {
             variant="body-bold"
             className="text-[32px] leading-none text-[#934646] tracking-[-0.02em] lg:text-[40px]"
           >
-            {String(vals[key]).padStart(2, "0")}
+            <span key={String(vals[key])} className="flip-digit">
+              {String(vals[key]).padStart(2, "0")}
+            </span>
           </Typography>
           <Typography
             variant="body-bold"

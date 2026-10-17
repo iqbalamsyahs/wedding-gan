@@ -1,5 +1,6 @@
 import Typography from "@/components/atoms/Typography";
 import Countdown from "@/components/molecules/Countdown";
+import Reveal from "@/components/atoms/Reveal";
 
 export default function WeddingEvent() {
   return (
@@ -15,12 +16,13 @@ export default function WeddingEvent() {
         Wedding Event
       </Typography>
 
+      <Reveal className="flex w-full justify-center">
       <div className="relative w-full max-w-92.25 aspect-378/345 lg:max-w-[560px] xl:max-w-[620px]">
         <img
           src="/assets/weeding_event/rectangle-event.svg"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover"
+          className="draw-in absolute inset-0 h-full w-full object-cover"
         />
 
         <div className="absolute inset-0 flex flex-col justify-center gap-4 py-6.5 pl-10.5 pr-5.5 lg:py-8 lg:pl-14 lg:pr-6 lg:gap-6">
@@ -64,9 +66,13 @@ export default function WeddingEvent() {
           </Typography>
         </div>
       </div>
+      </Reveal>
 
-      <Countdown />
+      <Reveal className="flex w-full justify-center" delay={150}>
+        <Countdown />
+      </Reveal>
 
+      <Reveal className="flex w-full justify-center" delay={300}>
       <div className="flex w-full max-w-92.25 items-center justify-between lg:max-w-[560px] lg:gap-6 xl:max-w-[620px]">
         <div className="flex flex-col items-center gap-1">
           <img
@@ -110,7 +116,9 @@ export default function WeddingEvent() {
           </Typography>
         </div>
       </div>
+      </Reveal>
 
+      <Reveal className="flex w-full justify-center" delay={450}>
       <div className="flex flex-col items-center gap-3">
         <img
           src="/assets/weeding_event/pinpoint.svg"
@@ -148,6 +156,7 @@ export default function WeddingEvent() {
           </span>
         </button>
       </div>
+      </Reveal>
 
       <img
         src="/assets/bride_groom/flower.svg"

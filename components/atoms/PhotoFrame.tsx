@@ -6,7 +6,7 @@ export default function PhotoFrame({ className = "" }: { className?: string }) {
   return (
     <div className={`${frame} ${className}`}>
       <div className="absolute -right-20 -top-20 overflow-hidden sm:-right-20 sm:-top-32 lg:h-56 lg:w-36 lg:-top-36 lg:-right-28 xl:h-64 xl:w-40 xl:-top-40 xl:-right-32">
-        <img src="/assets/cover/balloon.svg" alt="Balloon" className="h-full w-full object-cover object-top" />
+        <img src="/assets/cover/balloon.svg" alt="Balloon" className="float h-full w-full object-cover object-top" />
       </div>
 
       <div className="absolute inset-0 overflow-hidden rounded-full">

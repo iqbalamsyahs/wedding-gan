@@ -133,7 +133,7 @@ export default function Wishes() {
         {wishesList.map((item) => (
           <div
             key={item.id}
-            className="flex flex-col gap-1 rounded-[14px] border border-olive-dark/60 bg-transparent px-5 py-3.5 text-olive-dark"
+            className="wish-enter flex flex-col gap-1 rounded-[14px] border border-olive-dark/60 bg-transparent px-5 py-3.5 text-olive-dark"
           >
             <span className="font-body text-[15px] font-bold lg:text-[17px]">
               {item.name}
