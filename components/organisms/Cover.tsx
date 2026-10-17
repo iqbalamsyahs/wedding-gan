@@ -13,6 +13,8 @@ export default function Cover() {
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const photoRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => () => clearTimeout(timer.current), []);
+
   // Halaman tidak bisa di-scroll selama sampul masih tampil
   useEffect(() => {
     if (gone) return;
@@ -23,8 +25,6 @@ export default function Cover() {
       document.body.style.overflow = prev;
     };
   }, [gone]);
-
-  useEffect(() => () => clearTimeout(timer.current), []);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;

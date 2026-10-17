@@ -17,15 +17,15 @@ export default function WeddingEvent() {
       </Typography>
 
       <Reveal className="flex w-full justify-center">
-      <div className="relative w-full max-w-92.25 aspect-378/345 lg:max-w-[560px] xl:max-w-[620px]">
+      <div className="relative w-full max-w-92.25 lg:aspect-378/345 lg:max-w-[560px] xl:max-w-[620px]">
         <img
           src="/assets/weeding_event/rectangle-event.svg"
           alt=""
           aria-hidden="true"
-          className="draw-in absolute inset-0 h-full w-full object-cover"
+          className="draw-in absolute inset-0 h-full w-full object-fill"
         />
 
-        <div className="absolute inset-0 flex flex-col justify-center gap-4 py-6.5 pl-10.5 pr-5.5 lg:py-8 lg:pl-14 lg:pr-6 lg:gap-6">
+        <div className="relative flex flex-col justify-center gap-4 py-6.5 pl-10.5 pr-5.5 lg:absolute lg:inset-0 lg:py-8 lg:pl-14 lg:pr-6 lg:gap-6">
           <div className="flex items-start justify-around">
             <div className="flex flex-col -space-y-4">
               <Typography
