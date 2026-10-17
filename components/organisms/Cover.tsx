@@ -11,7 +11,6 @@ export default function Cover() {
   const [opened, setOpened] = useState(false);
   const [gone, setGone] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const photoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
@@ -25,19 +24,6 @@ export default function Cover() {
       document.body.style.overflow = prev;
     };
   }, [gone]);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const onScroll = () => {
-      if (photoRef.current) {
-        photoRef.current.style.transform = `translateY(${window.scrollY * 0.2}px)`;
-      }
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const handleOpen = () => {
     if (opened) return;
@@ -63,7 +49,7 @@ export default function Cover() {
         </div>
       </div>
 
-      <div ref={photoRef} className="cover-photo relative flex w-full flex-1 flex-col items-center justify-center px-4">
+      <div className="cover-photo relative flex w-full flex-1 flex-col items-center justify-center px-4">
         <PhotoFrame />
       </div>
 
