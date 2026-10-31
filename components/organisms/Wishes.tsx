@@ -69,9 +69,9 @@ export default function Wishes() {
   return (
     <section
       id="wishes"
-      className="relative flex w-full flex-col items-center gap-8 px-6 py-16 sm:px-10 sm:py-24 lg:px-16 lg:py-32 xl:px-24"
+      className="relative flex w-full flex-col items-center gap-8 px-6 py-16 sm:px-10 sm:py-24 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-16 lg:gap-y-8 lg:px-16 lg:py-32 xl:px-24"
     >
-      <Reveal variant="blur" className="flex w-full flex-col items-center gap-8">
+      <Reveal variant="blur" className="flex w-full flex-col items-center gap-8 lg:col-span-2">
       <div className="flex flex-col items-center gap-4 text-center">
         <Typography
           variant="body-bold"
@@ -152,7 +152,7 @@ export default function Wishes() {
       </div>
       </Reveal>
 
-      <Reveal variant="blur" className="mt-6 flex w-full justify-center" delay={450}>
+      <Reveal variant="blur" className="mt-6 flex w-full justify-center lg:col-span-2" delay={450}>
       <img
         src="/assets/gan-hani.svg"
         alt="Gan & Hani"

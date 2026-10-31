@@ -45,9 +45,9 @@ export default function Cover() {
   return (
     <section
       id="cover"
-      className={`cover relative flex min-h-dvh w-full flex-col justify-between px-15 sm:px-6 md:px-10 lg:px-24 xl:px-36 ${opened ? "is-open" : ""}`}
+      className={`cover relative flex min-h-dvh w-full flex-col justify-between overflow-x-clip px-15 sm:px-6 md:px-10 lg:grid lg:grid-cols-2 lg:items-center lg:px-24 xl:px-36 ${opened ? "is-open" : ""}`}
     >
-      <div className="cover-top relative flex w-full flex-col px-4 pt-14 sm:px-6 sm:pt-20 md:pt-16 lg:pt-20">
+      <div className="cover-top relative flex w-full flex-col px-4 pt-14 sm:px-6 sm:pt-20 md:pt-16 lg:col-start-1 lg:row-start-1 lg:pt-20">
         <HeaderSubtitle />
 
         <div className="relative">
@@ -55,11 +55,11 @@ export default function Cover() {
         </div>
       </div>
 
-      <div className="cover-photo relative flex w-full flex-1 flex-col items-center justify-center px-4">
+      <div className="cover-photo relative flex w-full flex-1 flex-col items-center justify-center px-4 lg:col-start-2 lg:row-span-2 lg:row-start-1">
         <PhotoFrame />
       </div>
 
-      <div className="cover-bottom relative mb-25 flex flex-col items-center gap-4 px-4 sm:mb-35 sm:gap-6 md:mb-24 lg:mb-28">
+      <div className="cover-bottom relative mb-25 flex flex-col items-center gap-4 px-4 sm:mb-35 sm:gap-6 md:mb-24 lg:col-start-1 lg:row-start-2 lg:mb-28">
         <GuestAddress />
 
         <Button onClick={handleOpen} />

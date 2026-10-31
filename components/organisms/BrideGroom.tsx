@@ -26,12 +26,12 @@ export default function BrideGroom() {
         className="slide-in-left lg:flex-col"
       />
 
-      <div className="relative flex h-30 w-screen items-center justify-center lg:h-auto lg:w-auto">
+      <div className="relative flex h-30 w-full items-center justify-center lg:h-auto lg:w-auto">
         <img
           src="/assets/bride_groom/line.svg"
           alt=""
           aria-hidden="true"
-          className="draw-in pointer-events-none absolute left-1/2 top-1/2 h-auto w-screen -translate-x-1/2 -translate-y-1/2 opacity-70 lg:relative lg:left-auto lg:top-auto lg:h-40 lg:w-auto lg:translate-x-0 lg:translate-y-0"
+          className="draw-in pointer-events-none absolute left-1/2 top-1/2 h-auto w-full -translate-x-1/2 -translate-y-1/2 opacity-70 lg:relative lg:left-auto lg:top-auto lg:h-40 lg:w-auto lg:translate-x-0 lg:translate-y-0"
         />
         <img
           src="/assets/bride_groom/and_circle.svg"
