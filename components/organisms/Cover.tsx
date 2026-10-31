@@ -14,6 +14,12 @@ export default function Cover() {
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
+  // Saat refresh, browser biasanya mengembalikan posisi scroll; paksa mulai dari sampul
+  useEffect(() => {
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+  }, []);
+
   // Halaman tidak bisa di-scroll selama sampul masih tampil
   useEffect(() => {
     if (gone) return;

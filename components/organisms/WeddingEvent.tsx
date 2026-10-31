@@ -18,15 +18,13 @@ export default function WeddingEvent() {
 
       <Reveal className="flex w-full justify-center">
       <div className="relative w-full max-w-92.25 lg:aspect-378/345 lg:max-w-[560px] xl:max-w-[620px]">
-        <img
-          src="/assets/weeding_event/rectangle-event.svg"
-          alt=""
+        <div
           aria-hidden="true"
-          className="draw-in absolute inset-0 h-full w-full object-fill"
+          className="draw-in absolute inset-x-0 top-[-19.4%] bottom-[-19.4%] bg-[url('/assets/weeding_event/rectangle-event.svg')] bg-[length:100%_100%] bg-no-repeat"
         />
 
-        <div className="relative flex flex-col justify-center gap-4 py-6.5 pl-10.5 pr-5.5 lg:absolute lg:inset-0 lg:py-8 lg:pl-14 lg:pr-6 lg:gap-6">
-          <div className="flex items-start justify-around">
+        <div className="relative flex flex-col justify-center gap-6 px-5 lg:absolute lg:inset-0 lg:py-8 lg:pl-14 lg:pr-6 lg:gap-6">
+          <div className="flex items-center justify-around">
             <div className="flex flex-col -space-y-4">
               <Typography
                 variant="body-bold"
@@ -144,7 +142,7 @@ export default function WeddingEvent() {
         </Typography>
         </div>
 
-        <button className="flex items-center gap-4 rounded-button bg-olive px-6 py-2 my-5 text-[#f5f1e8] lg:px-8 lg:py-3">
+        <button className="flex items-center gap-4 rounded-button bg-olive-dark px-6 py-2 my-5 text-[#f5f1e8] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-dark lg:px-8 lg:py-3">
           <img
             src="/assets/weeding_event/pinpoint-button.svg"
             alt=""

@@ -30,7 +30,7 @@ export default function CoupleProfile({
         <Typography
           variant="body-bold"
           as="p"
-          className={`text-[13px] text-ash text-center lg:text-[16px]`}
+          className={`text-[13px] text-olive-dark text-center lg:text-[16px]`}
         >
           {parents}
         </Typography>

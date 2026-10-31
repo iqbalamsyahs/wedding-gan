@@ -118,7 +118,7 @@ export default function Wishes() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex w-full items-center justify-center gap-3 rounded-button bg-olive py-3 px-6 text-[#f5f1e8] transition-colors hover:bg-olive-dark disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-3 rounded-button bg-olive-dark py-3 px-6 text-[#f5f1e8] transition-colors hover:bg-olive-dark/90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-dark disabled:opacity-50"
         >
           <svg
             className="h-5 w-5 fill-current"
