@@ -9,19 +9,19 @@ export default function PhotoFrame({ className = "" }: { className?: string }) {
         <img src="/assets/cover/balloon.svg" alt="Balloon" className="float h-full w-full object-cover object-top" />
       </div>
 
-      <div className="absolute inset-0 overflow-hidden rounded-full">
-        <img src={src} alt={alt} className="h-full w-full object-cover object-top" />
+      <div className="cover-photo-mask absolute inset-0 overflow-hidden rounded-full">
+        <img src={src} alt={alt} className="cover-photo-img h-full w-full object-cover object-top" />
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 z-30 h-20 overflow-hidden sm:h-24 lg:h-32">
-        <img src={src} alt="" aria-hidden="true" className="h-full w-full object-cover object-top" />
+      <div className="cover-photo-strip pointer-events-none absolute inset-x-0 z-30 h-20 overflow-hidden sm:h-24 lg:h-32">
+        <img src={src} alt="" aria-hidden="true" className="cover-strip-img h-full w-full object-cover object-top" />
       </div>
 
       <img
         src="/assets/cover/cover_circle.svg"
         alt="Cover Circle"
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-20 h-full w-full object-contain"
+        className="cover-ring pointer-events-none absolute inset-0 z-20 h-full w-full object-contain"
       />
     </div>
   );

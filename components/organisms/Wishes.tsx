@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 import Typography from "@/components/atoms/Typography";
 import Reveal from "@/components/atoms/Reveal";
+import { useGsap, inkMask } from "@/lib/useGsap";
 
 interface WishItem {
   id: string;
@@ -33,6 +35,64 @@ export default function Wishes() {
   const [wish, setWish] = useState("");
   const [wishesList, setWishesList] = useState<WishItem[]>(INITIAL_WISHES);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLElement>(null);
+  const prevCount = useRef(wishesList.length);
+
+  useGsap(rootRef, (root) => {
+    const trigger = { trigger: root, start: "top 75%", once: true };
+
+    gsap.fromTo(
+      root.querySelector("h2"),
+      { clipPath: "inset(0% 0% 100% 0%)" },
+      { clipPath: "inset(-20% -10% -20% -10%)", duration: 1.2, ease: "power3.out", scrollTrigger: trigger },
+    );
+    gsap.from(root.querySelectorAll("form > *"), {
+      x: -28,
+      autoAlpha: 0,
+      stagger: 0.12,
+      duration: 0.9,
+      ease: "power3.out",
+      scrollTrigger: trigger,
+    });
+    gsap.from(root.querySelectorAll(".wish-list > *"), {
+      x: 40,
+      autoAlpha: 0,
+      stagger: 0.12,
+      duration: 0.9,
+      ease: "power3.out",
+      scrollTrigger: trigger,
+    });
+    gsap.fromTo(
+      root.querySelector(".wish-art"),
+      { ...inkMask, maskPosition: "100% 0%" },
+      { maskPosition: "0% 0%", duration: 1.8, ease: "power2.inOut", scrollTrigger: trigger },
+    );
+
+    // Tombol kirim mengecil saat ditekan dan memantul kembali saat dilepas
+    const submit = root.querySelector<HTMLElement>("form button");
+    if (submit) {
+      submit.addEventListener("pointerdown", () => gsap.to(submit, { scale: 0.96, duration: 0.12 }));
+      submit.addEventListener("pointerup", () => gsap.to(submit, { scale: 1, duration: 0.4, ease: "back.out(3)" }));
+      submit.addEventListener("pointerleave", () => gsap.to(submit, { scale: 1, duration: 0.3 }));
+    }
+  });
+
+  // Ucapan baru masuk dengan blur ke jelas dan naik sedikit
+  useLayoutEffect(() => {
+    if (wishesList.length > prevCount.current && listRef.current) {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const item = listRef.current.firstElementChild;
+      if (item && !reduce) {
+        gsap.fromTo(
+          item,
+          { autoAlpha: 0, y: -18, filter: "blur(6px)" },
+          { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.9, ease: "power3.out" },
+        );
+      }
+    }
+    prevCount.current = wishesList.length;
+  }, [wishesList.length]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,6 +128,7 @@ export default function Wishes() {
 
   return (
     <section
+      ref={rootRef}
       id="wishes"
       className="relative flex w-full flex-col items-center gap-8 px-6 py-16 sm:px-10 sm:py-24 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-16 lg:gap-y-8 lg:px-16 lg:py-32 xl:px-24"
     >
@@ -135,11 +196,11 @@ export default function Wishes() {
       </Reveal>
 
       <Reveal variant="blur" className="flex w-full justify-center" delay={300}>
-      <div className="flex w-full max-w-[340px] flex-col gap-3.5 sm:max-w-[420px] lg:max-w-[500px]">
+      <div ref={listRef} className="wish-list flex w-full max-w-[340px] flex-col gap-3.5 sm:max-w-[420px] lg:max-w-[500px]">
         {wishesList.map((item) => (
           <div
             key={item.id}
-            className="wish-enter flex flex-col gap-1 rounded-[14px] border border-olive-dark/60 bg-transparent px-5 py-3.5 text-olive-dark"
+            className="flex flex-col gap-1 rounded-[14px] border border-olive-dark/60 bg-transparent px-5 py-3.5 text-olive-dark"
           >
             <span className="font-body text-[15px] font-bold lg:text-[17px]">
               {item.name}
@@ -156,7 +217,7 @@ export default function Wishes() {
       <img
         src="/assets/gan-hani.svg"
         alt="Gan & Hani"
-        className="h-auto w-full max-w-[203px] lg:max-w-[280px]"
+        className="wish-art h-auto w-full max-w-[203px] lg:max-w-[280px]"
       />
       </Reveal>
     </section>
