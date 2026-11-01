@@ -57,24 +57,21 @@ export default function Cover() {
     const mask = root.querySelector<HTMLElement>(".cover-photo-mask");
     const photo = root.querySelector(".cover-photo-img");
     const ring = root.querySelector(".cover-ring");
-    if (mask) gsap.set(mask, { maskImage: FEATHER_MASK, "--r": 0 });
+    const strip = root.querySelector<HTMLElement>(".cover-photo-strip");
+    // Pita atas memakai mask yang sama dengan foto utuh, jadi bentuk reveal-nya identik
+    gsap.set([mask, strip], { maskImage: FEATHER_MASK, "--r": 0 });
 
-    gsap.to(mask, { "--r": 110, duration: 2, ease: "power3.inOut", delay: 0.3 });
+    gsap.to([mask, strip], { "--r": 110, duration: 2, ease: "power3.inOut", delay: 0.3 });
     gsap.fromTo(
       photo,
       { scale: 1.3, filter: "blur(8px)" },
       { scale: 1, filter: "blur(0px)", duration: 2.4, ease: "power3.out", delay: 0.3 },
     );
-    // Pita atas (potongan foto) mengikuti zoom dan blur foto utuh, lalu naik masuk
+    // Pita atas mengikuti zoom dan blur foto utuh
     gsap.fromTo(
       root.querySelector(".cover-strip-img"),
       { scale: 1.3, filter: "blur(8px)" },
       { scale: 1, filter: "blur(0px)", duration: 2.4, ease: "power3.out", delay: 0.3 },
-    );
-    gsap.fromTo(
-      root.querySelector(".cover-photo-strip"),
-      { y: 30, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 1.6, ease: "power3.out", delay: 0.8 },
     );
 
     gsap.from(ring, {
@@ -101,15 +98,9 @@ export default function Cover() {
         duration: 1,
         ease: "power3.inOut",
       }, 0)
-      .to(root.querySelector(".cover-photo-mask"), {
+      .to([root.querySelector(".cover-photo-mask"), root.querySelector(".cover-photo-strip")], {
         "--r": 0,
         duration: 0.9,
-        ease: "power2.in",
-      }, 0.1)
-      .to(root.querySelector(".cover-photo-strip"), {
-        y: -40,
-        autoAlpha: 0,
-        duration: 0.8,
         ease: "power2.in",
       }, 0.1)
       .to(root.querySelector(".cover-ring"), {

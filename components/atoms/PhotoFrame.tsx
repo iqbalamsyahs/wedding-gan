@@ -13,7 +13,7 @@ export default function PhotoFrame({ className = "" }: { className?: string }) {
         <img src={src} alt={alt} className="cover-photo-img h-full w-full object-cover object-top" />
       </div>
 
-      <div className="cover-photo-strip pointer-events-none absolute inset-x-0 z-30 h-20 overflow-hidden sm:h-24 lg:h-32">
+      <div className="cover-photo-strip pointer-events-none absolute inset-0 z-30 overflow-hidden [clip-path:inset(0_0_calc(100%_-_5rem)_0)] sm:[clip-path:inset(0_0_calc(100%_-_6rem)_0)] lg:[clip-path:inset(0_0_calc(100%_-_8rem)_0)]">
         <img src={src} alt="" aria-hidden="true" className="cover-strip-img h-full w-full object-cover object-top" />
       </div>
 
