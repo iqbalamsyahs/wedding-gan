@@ -10,9 +10,10 @@ import PhotoFrame from "@/components/atoms/PhotoFrame";
 import Button from "@/components/atoms/Button";
 import { useGsap } from "@/lib/useGsap";
 
-// Lingkaran dengan tepi berbulu; --r (persen) menentukan seberapa besar area yang terlihat
+// Lingkaran dengan tepi berbulu; --r (persen) menentukan seberapa besar area yang terlihat.
+// --k menskalakan mask untuk elemen yang kotaknya lebih besar dari frame (pita atas)
 const FEATHER_MASK =
-  "radial-gradient(circle closest-side at 50% 50%, #000 calc(var(--r) * 1%), transparent calc(var(--r) * 1% + 16%))";
+  "radial-gradient(circle closest-side at 50% 50%, #000 calc(var(--r) * var(--k, 1) * 1%), transparent calc((var(--r) * 1% + 16%) * var(--k, 1)))";
 
 export default function Cover() {
   const [opened, setOpened] = useState(false);

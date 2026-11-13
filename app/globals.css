@@ -92,3 +92,23 @@ body {
     animation: none;
   }
 }
+
+/* Lengan pasangan di cover melambai bolak-balik (dibuat ulang dari lottie welcome greeting) */
+.wave {
+  animation: wave 1s ease-in-out infinite alternate;
+}
+
+@keyframes wave {
+  from {
+    transform: rotate(var(--from));
+  }
+  to {
+    transform: rotate(var(--to));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave {
+    animation: none;
+  }
+}
