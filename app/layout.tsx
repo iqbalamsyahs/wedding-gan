@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Great_Vibes, Kranky, Gowun_Batang } from "next/font/google";
+import { Great_Vibes, Kranky, Gowun_Batang, Amiri } from "next/font/google";
 import "./globals.css";
 
 const greatVibes = Great_Vibes({
@@ -20,6 +20,12 @@ const gowunBatang = Gowun_Batang({
   variable: "--font-gowun-batang",
 });
 
+const amiri = Amiri({
+  subsets: ["arabic"],
+  weight: "400",
+  variable: "--font-amiri",
+});
+
 export const metadata: Metadata = {
   title: "Wedding Invitation - Hani & GanGan",
   description: "Wedding invitation of Hani & GanGan",
@@ -33,7 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${greatVibes.variable} ${kranky.variable} ${gowunBatang.variable}`}
+      className={`${greatVibes.variable} ${kranky.variable} ${gowunBatang.variable} ${amiri.variable}`}
     >
       <body>{children}</body>
     </html>

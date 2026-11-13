@@ -16,28 +16,32 @@ const INITIAL_WISHES: WishItem[] = [
   {
     id: "1",
     name: "Nama Tamu",
-    wish: "Lorem Ipsum",
+    wish: "Selamat menempuh hidup baru, semoga menjadi keluarga yang sakinah, mawaddah, warahmah.",
   },
   {
     id: "2",
     name: "Nama Tamu",
-    wish: "Lorem Ipsum",
+    wish: "Barakallahu lakuma wa baraka 'alaikuma wa jama'a bainakuma fii khair.",
   },
   {
     id: "3",
     name: "Nama Tamu",
-    wish: "Lorem Ipsum",
+    wish: "Bahagia selalu untuk kalian berdua, semoga langgeng sampai akhir hayat.",
   },
 ];
+
+const PER_PAGE = 5;
 
 export default function Wishes() {
   const [name, setName] = useState("");
   const [wish, setWish] = useState("");
   const [wishesList, setWishesList] = useState<WishItem[]>(INITIAL_WISHES);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [page, setPage] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLElement>(null);
   const prevCount = useRef(wishesList.length);
+  const pageDir = useRef(0); // 1 = berikutnya, -1 = sebelumnya, 0 = tanpa animasi pindah halaman
 
   useGsap(rootRef, (root) => {
     const trigger = { trigger: root, start: "top 75%", once: true };
@@ -94,6 +98,24 @@ export default function Wishes() {
     prevCount.current = wishesList.length;
   }, [wishesList.length]);
 
+  // Pindah halaman: kartu masuk dari arah tombol yang diklik, bertahap dengan blur
+  useLayoutEffect(() => {
+    const dir = pageDir.current;
+    pageDir.current = 0;
+    if (!dir || !listRef.current) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    gsap.fromTo(
+      listRef.current.children,
+      { x: 40 * dir, autoAlpha: 0, filter: "blur(6px)" },
+      { x: 0, autoAlpha: 1, filter: "blur(0px)", duration: 0.6, ease: "power3.out", stagger: 0.06, overwrite: true },
+    );
+  }, [page]);
+
+  const goToPage = (next: number) => {
+    pageDir.current = next > page ? 1 : -1;
+    setPage(next);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !wish.trim()) return;
@@ -120,11 +142,17 @@ export default function Wishes() {
       // Fallback silently if API fails
     } finally {
       setWishesList((prev) => [newWishItem, ...prev]);
+      setPage(0); // ucapan baru tampil di halaman pertama
       setName("");
       setWish("");
       setIsSubmitting(false);
     }
   };
+
+  const totalPages = Math.max(1, Math.ceil(wishesList.length / PER_PAGE));
+  const pageWishes = wishesList.slice(page * PER_PAGE, (page + 1) * PER_PAGE);
+  const pageBtn =
+    "rounded-button border border-olive-dark/60 px-4 py-1.5 font-body text-[14px] font-bold text-olive-dark transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-olive-dark disabled:opacity-30 lg:text-[16px]";
 
   return (
     <section
@@ -146,9 +174,8 @@ export default function Wishes() {
           variant="body-bold"
           className="max-w-[340px] text-center text-[14px] leading-5.75 text-olive-dark tracking-[-0.02em] lg:max-w-[540px] lg:text-[18px]"
         >
-          Lorem ipsum dolor sit amet consectetur. Et varius pharetra leo nibh non
-          natoque sed. Feugiat tincidunt ornare amet imperdiet ultricies nullam.
-          Quis purus vitae eu maecenas non dolor.
+          Kirimkan doa dan ucapan terbaik Anda untuk kedua mempelai. Setiap doa
+          yang Anda titipkan akan menjadi kenangan berharga bagi kami.
         </Typography>
       </div>
       </Reveal>
@@ -195,9 +222,9 @@ export default function Wishes() {
       </form>
       </Reveal>
 
-      <Reveal variant="blur" className="flex w-full justify-center" delay={300}>
+      <Reveal variant="blur" className="flex w-full flex-col items-center gap-4" delay={300}>
       <div ref={listRef} className="wish-list flex w-full max-w-[340px] flex-col gap-3.5 sm:max-w-[420px] lg:max-w-[500px]">
-        {wishesList.map((item) => (
+        {pageWishes.map((item) => (
           <div
             key={item.id}
             className="flex flex-col gap-1 rounded-[14px] border border-olive-dark/60 bg-transparent px-5 py-3.5 text-olive-dark"
@@ -211,6 +238,20 @@ export default function Wishes() {
           </div>
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <nav aria-label="Halaman ucapan" className="flex items-center gap-4">
+          <button type="button" className={pageBtn} disabled={page === 0} onClick={() => goToPage(page - 1)}>
+            &larr; Sebelumnya
+          </button>
+          <span className="font-body text-[14px] text-olive-dark lg:text-[16px]" aria-live="polite">
+            {page + 1} / {totalPages}
+          </span>
+          <button type="button" className={pageBtn} disabled={page === totalPages - 1} onClick={() => goToPage(page + 1)}>
+            Berikutnya &rarr;
+          </button>
+        </nav>
+      )}
       </Reveal>
 
       <Reveal variant="blur" className="mt-6 flex w-full justify-center lg:col-span-2" delay={450}>

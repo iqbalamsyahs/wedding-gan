@@ -1,25 +1,35 @@
 import Decoration from "@/components/atoms/Decoration";
-import BackgroundLayers from "@/components/atoms/BackgroundLayers";
+import BackgroundLayers, {
+  PaperTexture,
+} from "@/components/atoms/BackgroundLayers";
+import SmoothScroll from "@/components/atoms/SmoothScroll";
 import Cover from "@/components/organisms/Cover";
 import BrideGroom from "@/components/organisms/BrideGroom";
 import WeddingEvent from "@/components/organisms/WeddingEvent";
-import WeddingGift from "@/components/organisms/WeddingGift";
+import QuranVerse from "@/components/organisms/QuranVerse";
 import Wishes from "@/components/organisms/Wishes";
 
 export default function WeddingInvitation() {
   return (
-    <main className="relative mx-auto flex h-full w-full flex-col items-center bg-cream">
-      <BackgroundLayers />
+    <>
+      <PaperTexture />
+      <SmoothScroll>
+        <main className="relative mx-auto flex h-full w-full flex-col items-center">
+          <BackgroundLayers />
 
-      <Cover />
+          <Cover />
 
-      <BrideGroom />
+          <QuranVerse />
 
-      <WeddingEvent />
+          <BrideGroom />
 
-      <WeddingGift />
+          <WeddingEvent />
 
-      <Wishes />
-    </main>
+          {/* hidden sementara: <WeddingGift /> */}
+
+          <Wishes />
+        </main>
+      </SmoothScroll>
+    </>
   );
 }

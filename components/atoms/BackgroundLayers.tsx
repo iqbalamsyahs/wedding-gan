@@ -1,20 +1,25 @@
 import { useId } from "react";
 
+// Tekstur kertas fixed: taruh di luar SmoothScroll (konten yang di-transform merusak position: fixed)
+export function PaperTexture() {
+  return (
+    //  paper texture (Figma Paper_03 1, node 2019:435) — lighten-blended over cream
+    <div
+      aria-hidden
+      className="pointer-events-none fixed inset-0 h-screen w-screen mix-blend-lighten"
+      style={{
+        backgroundImage: "url('/assets/background/background_texture.svg')",
+        backgroundRepeat: "repeat",
+        backgroundSize: "auto",
+      }}
+    />
+  );
+}
+
 export default function BackgroundLayers() {
   const noiseId = useId();
   return (
     <>
-      {/* paper texture (Figma Paper_03 1, node 2019:435) — lighten-blended over cream */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 h-screen w-screen mix-blend-lighten"
-        style={{
-          backgroundImage: "url('/assets/background/background_texture.svg')",
-          backgroundRepeat: "repeat",
-          backgroundSize: "auto",
-        }}
-      />
-
       {/* noise overlay — mono, x 0.1, y 0.1, density 100%, #000 @ 25% */}
       <svg
         aria-hidden

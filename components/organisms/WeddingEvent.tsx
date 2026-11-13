@@ -50,15 +50,6 @@ export default function WeddingEvent() {
       scrollTrigger: frameTrigger,
     });
 
-    gsap.from(root.querySelector(".event-desc"), {
-      y: 18,
-      autoAlpha: 0,
-      filter: "blur(6px)",
-      duration: 1.1,
-      ease: "power2.out",
-      delay: 0.8,
-      scrollTrigger: frameTrigger,
-    });
 
     // Kartu Akad dan Resepsi masuk dari dua sisi berlawanan
     const cardsTrigger = { trigger: root.querySelector(".event-cards"), start: "top 80%", once: true };
@@ -171,28 +162,16 @@ export default function WeddingEvent() {
               </Typography>
             </div>
 
-            <img
-              src="/assets/weeding_event/calendar.svg"
-              alt=""
-              aria-hidden="true"
-              className="event-calendar h-35 w-35.25 lg:h-44 lg:w-44"
-            />
+            <div aria-hidden="true" className="event-calendar relative h-35 w-35.25 lg:h-44 lg:w-44">
+              <img src="/assets/weeding_event/calendar.svg" alt="" className="h-full w-full" />
+              {/* Lingkaran merah penanda tanggal 29 */}
+              <span className="absolute left-[65%] top-[80%] h-[13%] w-[15%] -translate-x-1/2 -translate-y-1/2 -rotate-12 rounded-[50%] border-2 border-[#c0392b]" />
+            </div>
           </div>
 
-          <Typography
-            variant="body-bold"
-            className="event-desc text-center text-[14px] text-olive-dark tracking-[-0.02em] lg:text-[18px]"
-          >
-            Lorem ipsum dolor sit amet consectetur. Et varius pharetra leo nibh
-            non natoque sed. Feugiat tincidunt ornare amet imperdiet ultricies
-            nullam.
-          </Typography>
+          <Countdown />
         </div>
       </div>
-      </Reveal>
-
-      <Reveal className="flex w-full justify-center" delay={150}>
-        <Countdown />
       </Reveal>
 
       <Reveal className="flex w-full justify-center" delay={300}>
@@ -262,8 +241,9 @@ export default function WeddingEvent() {
           variant="body-bold"
           className="max-w-75 text-center text-[14px] leading-5.75 text-olive-dark tracking-[-0.02em] lg:max-w-[420px] lg:text-[18px]"
         >
-          Lorem ipsum dolor sit amet consectetur. Morbi in auctor tortor at
-          sit donec cursus vitae. Nunc bibendum amet sit.
+          [Nama Gedung]
+          <br />
+          [Alamat lengkap, Kota]
         </Typography>
         </div>
 
