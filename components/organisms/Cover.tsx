@@ -8,6 +8,7 @@ import CoupleNames from "@/components/molecules/CoupleNames";
 import GuestAddress from "@/components/molecules/GuestAddress";
 import PhotoFrame from "@/components/atoms/PhotoFrame";
 import Button from "@/components/atoms/Button";
+import { OPEN_EVENT } from "@/components/molecules/MusicPlayer";
 import { useGsap } from "@/lib/useGsap";
 
 // Lingkaran dengan tepi berbulu; --r (persen) menentukan seberapa besar area yang terlihat.
@@ -15,7 +16,7 @@ import { useGsap } from "@/lib/useGsap";
 const FEATHER_MASK =
   "radial-gradient(circle closest-side at 50% 50%, #000 calc(var(--r) * var(--k, 1) * 1%), transparent calc((var(--r) * 1% + 16%) * var(--k, 1)))";
 
-export default function Cover() {
+export default function Cover({ guest }: { guest?: string }) {
   const [opened, setOpened] = useState(false);
   const [gone, setGone] = useState(false);
   const rootRef = useRef<HTMLElement>(null);
@@ -121,6 +122,7 @@ export default function Cover() {
   const handleOpen = () => {
     if (opened) return;
     setOpened(true);
+    window.dispatchEvent(new Event(OPEN_EVENT));
 
     // Reduced motion: tidak ada timeline, sampul langsung dihapus
     if (openTl.current) openTl.current.play();
@@ -134,7 +136,7 @@ export default function Cover() {
     <section
       ref={rootRef}
       id="cover"
-      className="cover relative flex min-h-dvh w-full flex-col justify-between overflow-x-clip px-15 sm:px-6 md:px-10 lg:grid lg:grid-cols-2 lg:items-center lg:px-24 xl:px-36"
+      className="cover relative flex min-h-dvh w-full flex-col justify-between overflow-x-clip px-6 md:px-10 lg:grid lg:grid-cols-2 lg:items-center lg:px-24 xl:px-36"
     >
       <div className="cover-top relative flex w-full flex-col px-4 pt-14 sm:px-6 sm:pt-20 md:pt-16 lg:col-start-1 lg:row-start-1 lg:pt-20">
         <HeaderSubtitle />
@@ -144,12 +146,12 @@ export default function Cover() {
         </div>
       </div>
 
-      <div className="cover-photo relative flex w-full flex-1 flex-col items-center justify-center px-4 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+      <div className="cover-photo relative flex w-full flex-1 flex-col items-center justify-center px-4 pt-12 lg:pt-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
         <PhotoFrame />
       </div>
 
-      <div className="cover-bottom relative mb-25 flex flex-col items-center gap-4 px-4 sm:mb-35 sm:gap-6 md:mb-24 lg:col-start-1 lg:row-start-2 lg:mb-28">
-        <GuestAddress />
+      <div className="cover-bottom relative mb-16 flex flex-col items-center gap-4 px-4 sm:mb-35 sm:gap-6 md:mb-24 lg:col-start-1 lg:row-start-2 lg:mb-28">
+        <GuestAddress guest={guest} />
 
         <Button onClick={handleOpen} />
       </div>

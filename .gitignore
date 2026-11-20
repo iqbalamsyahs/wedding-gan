@@ -2,3 +2,4 @@
 node_modules/
 tsconfig.tsbuildinfo
 .openidea/
+.env*.local

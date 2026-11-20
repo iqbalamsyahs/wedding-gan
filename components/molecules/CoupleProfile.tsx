@@ -17,7 +17,7 @@ export default function CoupleProfile({
         src={image}
         alt=""
         aria-hidden="true"
-        className="h-44 w-auto shrink-0 lg:h-56 xl:h-64"
+        className="h-56 w-auto shrink-0 lg:h-72 xl:h-80"
       />
       <div className={`relative flex flex-col gap-2 px-5 lg:gap-3 lg:px-0 lg:top-0 ${reversed ? "top-20" : ""}`}>
         <Typography

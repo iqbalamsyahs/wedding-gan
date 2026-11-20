@@ -1,47 +1,96 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import Typography from "@/components/atoms/Typography";
 import Reveal from "@/components/atoms/Reveal";
 import { useGsap, inkMask } from "@/lib/useGsap";
 
+type Attendance = "hadir" | "berhalangan" | "ragu";
+
+// Label + warna pill per status kehadiran
+const ATTENDANCE: Record<Attendance, { label: string; pill: string }> = {
+  hadir: { label: "Hadir", pill: "bg-olive/15 text-olive-dark" },
+  berhalangan: { label: "Berhalangan Hadir", pill: "bg-warm-gray/12 text-warm-gray" },
+  ragu: { label: "Masih Ragu", pill: "bg-burgundy/10 text-burgundy" },
+};
+
 interface WishItem {
   id: string;
   name: string;
   wish: string;
+  attendance: Attendance;
+  createdAt: number;
 }
 
-const INITIAL_WISHES: WishItem[] = [
-  {
-    id: "1",
-    name: "Nama Tamu",
-    wish: "Selamat menempuh hidup baru, semoga menjadi keluarga yang sakinah, mawaddah, warahmah.",
-  },
-  {
-    id: "2",
-    name: "Nama Tamu",
-    wish: "Barakallahu lakuma wa baraka 'alaikuma wa jama'a bainakuma fii khair.",
-  },
-  {
-    id: "3",
-    name: "Nama Tamu",
-    wish: "Bahagia selalu untuk kalian berdua, semoga langgeng sampai akhir hayat.",
-  },
-];
+const MIN = 60_000;
+
+// Apps Script di Google Sheet "Konfirmasi Tamu": GET = daftar ucapan, POST = simpan ucapan
+const SHEET_API = process.env.NEXT_PUBLIC_SHEET_API_URL;
+
+// Sheet menyimpan label ("Berhalangan Hadir"); ubah balik ke key, label tak dikenal dianggap ragu
+const attendanceFromLabel = (label: string): Attendance =>
+  (Object.keys(ATTENDANCE) as Attendance[]).find((k) => ATTENDANCE[k].label === label) ?? "ragu";
+
+const rtf = new Intl.RelativeTimeFormat("id", { numeric: "auto" });
+
+// "Baru saja", "10 menit yang lalu", "kemarin", "3 hari yang lalu"
+function timeAgo(ts: number, now: number) {
+  const s = Math.round((ts - now) / 1000);
+  if (s > -60) return "Baru saja";
+  const steps: [Intl.RelativeTimeFormatUnit, number][] = [
+    ["minute", 60], ["hour", 3600], ["day", 86400], ["week", 604800], ["month", 2592000], ["year", Infinity],
+  ];
+  for (let i = 0; i < steps.length - 1; i++) {
+    const [unit, size] = steps[i];
+    if (-s < steps[i + 1][1]) {
+      const text = rtf.format(Math.round(s / size), unit);
+      return text.charAt(0).toUpperCase() + text.slice(1);
+    }
+  }
+  return rtf.format(Math.round(s / 31536000), "year");
+}
 
 const PER_PAGE = 5;
 
 export default function Wishes() {
   const [name, setName] = useState("");
   const [wish, setWish] = useState("");
-  const [wishesList, setWishesList] = useState<WishItem[]>(INITIAL_WISHES);
+  const [attendance, setAttendance] = useState<Attendance | "">("");
+  const [wishesList, setWishesList] = useState<WishItem[]>([]);
+  const [loaded, setLoaded] = useState(!SHEET_API);
+  // Waktu relatif baru dirender di klien (hindari beda HTML server vs klien), diperbarui tiap menit
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => {
+    setNow(Date.now());
+    const id = setInterval(() => setNow(Date.now()), MIN);
+    return () => clearInterval(id);
+  }, []);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [page, setPage] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLElement>(null);
   const prevCount = useRef(wishesList.length);
   const pageDir = useRef(0); // 1 = berikutnya, -1 = sebelumnya, 0 = tanpa animasi pindah halaman
+
+  // Ambil ucapan dari Sheet (terbaru di atas). Ucapan yang baru dikirim sebelum data datang tetap di atas.
+  useEffect(() => {
+    if (!SHEET_API) return;
+    fetch(SHEET_API)
+      .then((r) => r.json())
+      .then((rows: (Omit<WishItem, "attendance"> & { attendance: string })[]) => {
+        const fetched = rows.map((r) => ({
+          ...r,
+          name: String(r.name),
+          wish: String(r.wish),
+          attendance: attendanceFromLabel(r.attendance),
+        }));
+        prevCount.current = Infinity; // data awal bukan "ucapan baru", jangan dianimasikan
+        setWishesList((prev) => [...prev.filter((w) => w.id.startsWith("local-")), ...fetched]);
+      })
+      .catch(() => {})
+      .finally(() => setLoaded(true));
+  }, []);
 
   useGsap(rootRef, (root) => {
     const trigger = { trigger: root, start: "top 75%", once: true };
@@ -118,23 +167,29 @@ export default function Wishes() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !wish.trim()) return;
+    if (!name.trim() || !wish.trim() || !attendance) return;
 
     const newWishItem: WishItem = {
-      id: Date.now().toString(),
+      id: `local-${Date.now()}`,
       name: name.trim(),
       wish: wish.trim(),
+      attendance,
+      createdAt: Date.now(),
     };
 
     setIsSubmitting(true);
 
     try {
-      const endpoint = process.env.NEXT_PUBLIC_SHEET_API_URL;
-      if (endpoint) {
-        await fetch(endpoint, {
+      if (SHEET_API) {
+        // text/plain + no-cors: request "sederhana" tanpa preflight; Apps Script tetap membaca body JSON-nya
+        await fetch(SHEET_API, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: name.trim(), wish: wish.trim() }),
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
+          body: JSON.stringify({
+            name: newWishItem.name,
+            wish: newWishItem.wish,
+            attendance: ATTENDANCE[attendance].label,
+          }),
           mode: "no-cors",
         });
       }
@@ -145,6 +200,7 @@ export default function Wishes() {
       setPage(0); // ucapan baru tampil di halaman pertama
       setName("");
       setWish("");
+      setAttendance("");
       setIsSubmitting(false);
     }
   };
@@ -203,6 +259,31 @@ export default function Wishes() {
           className="w-full resize-none rounded-[14px] border border-olive-dark/60 bg-transparent px-5 py-3.5 font-body text-[15px] text-olive-dark placeholder:text-olive-dark/60 focus:border-olive-dark focus:outline-none lg:text-[17px]"
         />
 
+        <fieldset className="flex flex-col gap-2">
+          <legend className="mb-2 font-body text-[15px] font-bold text-olive-dark lg:text-[17px]">
+            Konfirmasi Kehadiran
+          </legend>
+          <div className="grid grid-cols-3 gap-2">
+            {(Object.keys(ATTENDANCE) as Attendance[]).map((key) => (
+              <label
+                key={key}
+                className="flex cursor-pointer items-center justify-center rounded-[14px] border border-olive-dark/60 px-2 py-2.5 text-center font-body text-[13px] font-bold leading-tight text-olive-dark transition-colors has-checked:border-olive-dark has-checked:bg-olive-dark has-checked:text-[#f5f1e8] has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-olive-dark lg:text-[15px]"
+              >
+                <input
+                  type="radio"
+                  name="attendance"
+                  value={key}
+                  checked={attendance === key}
+                  onChange={() => setAttendance(key)}
+                  required
+                  className="sr-only"
+                />
+                {ATTENDANCE[key].label}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
         <button
           type="submit"
           disabled={isSubmitting}
@@ -224,18 +305,38 @@ export default function Wishes() {
 
       <Reveal variant="blur" className="flex w-full flex-col items-center gap-4" delay={300}>
       <div ref={listRef} className="wish-list flex w-full max-w-[340px] flex-col gap-3.5 sm:max-w-[420px] lg:max-w-[500px]">
+        {pageWishes.length === 0 && (
+          <p className="py-6 text-center font-body text-[15px] text-warm-gray lg:text-[17px]">
+            {loaded ? "Belum ada ucapan. Jadilah yang pertama mengirim doa ✨" : "Memuat ucapan…"}
+          </p>
+        )}
         {pageWishes.map((item) => (
-          <div
+          <article
             key={item.id}
-            className="flex flex-col gap-1 rounded-[14px] border border-olive-dark/60 bg-transparent px-5 py-3.5 text-olive-dark"
+            className="flex flex-col gap-3 rounded-[22px] border border-[#e3d6c4] bg-white/60 px-5 py-5 shadow-[0_4px_14px_rgba(120,90,60,0.08)] lg:px-7 lg:py-6"
           >
-            <span className="font-body text-[15px] font-bold lg:text-[17px]">
-              {item.name}
-            </span>
-            <p className="font-body text-[14px] leading-relaxed text-olive-dark/80 lg:text-[16px]">
+            <div className="flex items-start justify-between gap-3">
+              <h3 className="font-body text-[18px] font-bold leading-snug text-[#3f3631] lg:text-[22px]">
+                {item.name}
+              </h3>
+              <span
+                className={`shrink-0 rounded-full px-3 py-1 font-body text-[12px] font-bold lg:text-[14px] ${ATTENDANCE[item.attendance].pill}`}
+              >
+                {ATTENDANCE[item.attendance].label}
+              </span>
+            </div>
+            <p className="font-body text-[15px] leading-relaxed text-[#6b625b] lg:text-[17px]">
               {item.wish}
             </p>
-          </div>
+            {now !== null && (
+              <time
+                dateTime={new Date(item.createdAt).toISOString()}
+                className="font-body text-[13px] text-warm-gray/80 lg:text-[14px]"
+              >
+                {timeAgo(item.createdAt, now)}
+              </time>
+            )}
+          </article>
         ))}
       </div>
 

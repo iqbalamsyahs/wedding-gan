@@ -8,16 +8,17 @@ import BrideGroom from "@/components/organisms/BrideGroom";
 import WeddingEvent from "@/components/organisms/WeddingEvent";
 import QuranVerse from "@/components/organisms/QuranVerse";
 import Wishes from "@/components/organisms/Wishes";
+import MusicPlayer from "@/components/molecules/MusicPlayer";
 
-export default function WeddingInvitation() {
+export default function WeddingInvitation({ guest }: { guest?: string }) {
   return (
     <>
       <PaperTexture />
       <SmoothScroll>
-        <main className="relative mx-auto flex h-full w-full flex-col items-center">
+        <main className="relative mx-auto flex h-full w-full flex-col items-center overflow-x-clip">
           <BackgroundLayers />
 
-          <Cover />
+          <Cover guest={guest} />
 
           <QuranVerse />
 
@@ -30,6 +31,7 @@ export default function WeddingInvitation() {
           <Wishes />
         </main>
       </SmoothScroll>
+      <MusicPlayer />
     </>
   );
 }

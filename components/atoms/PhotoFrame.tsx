@@ -38,7 +38,7 @@ function WavingCouple({ className, alt }: { className: string; alt: string }) {
 }
 
 export default function PhotoFrame({ className = "" }: { className?: string }) {
-  const frame = "relative aspect-square w-[260px] max-w-[78vw] max-[400px]:w-[200px] lg:w-[min(360px,40vh)] xl:w-[min(400px,42vh)]";
+  const frame = "relative aspect-square w-[260px] max-w-[78vw] max-[400px]:w-[min(200px,24dvh)] lg:w-[min(360px,40vh)] xl:w-[min(400px,42vh)]";
 
   return (
     <div className={`${frame} ${className}`}>
