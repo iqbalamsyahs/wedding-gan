@@ -22,9 +22,11 @@ export default function Cover({ guest }: { guest?: string }) {
   const rootRef = useRef<HTMLElement>(null);
   const openTl = useRef<gsap.core.Timeline | null>(null);
 
-  // Saat refresh, browser biasanya mengembalikan posisi scroll; paksa mulai dari sampul
+  // Saat refresh, browser biasanya mengembalikan posisi scroll; paksa mulai dari sampul.
+  // Lewat ScrollTrigger, bukan history langsung: ScrollTrigger menyimpan nilai lamanya ("auto")
+  // dan memasangnya lagi setiap refresh, sehingga Safari tetap memulihkan scroll ke bawah.
   useEffect(() => {
-    window.history.scrollRestoration = "manual";
+    ScrollTrigger.clearScrollMemory("manual");
     window.scrollTo(0, 0);
   }, []);
 
