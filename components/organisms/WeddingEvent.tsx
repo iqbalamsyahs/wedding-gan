@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { gsap } from "gsap";
+import { Butterfly, Flock } from "@/components/atoms/Ornaments";
 import Typography from "@/components/atoms/Typography";
 import Countdown from "@/components/molecules/Countdown";
 import Reveal from "@/components/atoms/Reveal";
@@ -138,6 +139,8 @@ export default function WeddingEvent() {
           aria-hidden="true"
           className="event-frame absolute inset-x-0 top-[-19.4%] bottom-[-19.4%] bg-[url('/assets/weeding_event/rectangle-event.svg')] bg-[length:100%_100%] bg-no-repeat"
         />
+        {/* Hinggap di sudut kanan atas bingkai */}
+        <Butterfly tint="rose" delay={-5} className="-right-3 -top-[30%] z-10 w-10 lg:-right-10 lg:-top-[27%] lg:w-14" />
 
         <div className="relative flex flex-col justify-center gap-6 px-5 lg:absolute lg:inset-0 lg:py-8 lg:pl-14 lg:pr-6 lg:gap-6">
           <div className="flex items-center justify-around">
@@ -267,6 +270,12 @@ export default function WeddingEvent() {
         aria-hidden="true"
         className="h-12 w-auto lg:h-16"
       />
+
+      {/* Desktop: sisi kiri kosong di samping kartu Akad */}
+      <Butterfly tint="sage" delay={-9} className="hidden lg:block left-[10%] top-[56%] w-12" />
+
+      {/* Melintas di celah menuju Wishes; offset supaya tidak sinkron dengan kawanan di ayat */}
+      <Flock offset={-13} className="-bottom-6 lg:bottom-4" />
     </section>
   );
 }

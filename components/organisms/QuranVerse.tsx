@@ -1,5 +1,6 @@
 import Typography from "@/components/atoms/Typography";
 import Reveal from "@/components/atoms/Reveal";
+import { Butterfly, Flock } from "@/components/atoms/Ornaments";
 
 // Satu layar penuh: ornamen bunga di atas dan bawah, ranting di sudut,
 // supaya section berikutnya (Bride & Groom) belum terlihat saat ayat tampil.
@@ -21,6 +22,9 @@ export default function QuranVerse() {
         aria-hidden="true"
         className="pointer-events-none absolute bottom-6 right-4 w-14 rotate-[20deg] opacity-80 lg:bottom-12 lg:right-12 lg:w-20"
       />
+
+      <Butterfly tint="rose" className="right-[12%] top-[17%] w-10 lg:right-[27%] lg:top-[12%] lg:w-14" />
+      <Flock className="bottom-[7%]" />
 
       <Reveal variant="blur" className="flex justify-center">
         <img

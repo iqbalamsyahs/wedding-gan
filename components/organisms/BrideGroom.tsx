@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import Typography from "@/components/atoms/Typography";
 import CoupleProfile from "@/components/molecules/CoupleProfile";
 import Reveal from "@/components/atoms/Reveal";
+import { Butterfly, Flock } from "@/components/atoms/Ornaments";
 import { useGsap, inkMask } from "@/lib/useGsap";
 
 export default function BrideGroom() {
@@ -59,6 +60,9 @@ export default function BrideGroom() {
       >
         Bride &amp; Groom
       </Typography>
+
+      <Butterfly tint="sage" delay={-3} className="right-[10%] top-12 w-9 lg:right-[25%] lg:top-24 lg:w-14" />
+      <Butterfly tint="rose" delay={-7} className="left-[9%] top-[46%] w-9 lg:left-[5%] lg:top-[30%] lg:w-12" />
 
       <div className="relative flex w-full flex-col items-center gap-10 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:gap-12 xl:gap-20">
       <CoupleProfile

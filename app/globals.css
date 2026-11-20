@@ -95,6 +95,124 @@ body {
   }
 }
 
+/* ---- Ornamen hidup (components/atoms/Ornaments.tsx) ---- */
+
+/* Kupu-kupu: melayang pelan di sekitar titik hinggap; sayap mengepak beberapa kali lalu meluncur */
+.bf {
+  animation: bf-drift 11s ease-in-out var(--d, 0s) infinite;
+}
+
+.bf-wing {
+  transform-box: view-box;
+  transform-origin: 20px 16px;
+  animation: bf-flap 2.6s cubic-bezier(0.45, 0, 0.55, 1) var(--d, 0s) infinite;
+}
+
+@keyframes bf-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-8deg);
+  }
+  30% {
+    transform: translate(14px, -12px) rotate(6deg);
+  }
+  55% {
+    transform: translate(-6px, -22px) rotate(-3deg);
+  }
+  80% {
+    transform: translate(-12px, -6px) rotate(-12deg);
+  }
+}
+
+@keyframes bf-flap {
+  0%,
+  40%,
+  100% {
+    transform: scaleX(1);
+  }
+  8%,
+  24% {
+    transform: scaleX(0.22);
+  }
+  16%,
+  32% {
+    transform: scaleX(0.95);
+  }
+}
+
+/* Burung: melintas dari kiri ke kanan dengan lintasan sedikit melengkung, sayap mengepak */
+.bird {
+  animation: bird-fly var(--dur, 24s) linear var(--d, 0s) infinite;
+}
+
+.bird-bob {
+  animation: bird-bob 3.2s ease-in-out var(--bob, 0s) infinite;
+}
+
+.bird-wing {
+  transform-box: view-box;
+  transform-origin: 14px 8.2px;
+  animation: bird-flap 0.55s ease-in-out var(--bob, 0s) infinite alternate;
+}
+
+.bird-wing-r {
+  animation-name: bird-flap-r;
+}
+
+@keyframes bird-fly {
+  from {
+    transform: translate(-48px, 12px);
+  }
+  50% {
+    transform: translate(50vw, -14px);
+  }
+  to {
+    transform: translate(calc(100vw + 48px), 6px);
+  }
+}
+
+@keyframes bird-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes bird-flap {
+  from {
+    transform: rotate(14deg);
+  }
+  to {
+    transform: rotate(-22deg);
+  }
+}
+
+@keyframes bird-flap-r {
+  from {
+    transform: rotate(-14deg);
+  }
+  to {
+    transform: rotate(22deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bf,
+  .bf-wing,
+  .bird-bob,
+  .bird-wing {
+    animation: none;
+  }
+  /* Burung diam di tengah lintasan, tidak menghilang di luar layar */
+  .bird {
+    animation: none;
+    transform: translateX(var(--rest, 60vw));
+  }
+}
+
 /* Lengan pasangan di cover melambai bolak-balik (dibuat ulang dari lottie welcome greeting) */
 .wave {
   animation: wave 1s ease-in-out infinite alternate;

@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import Typography from "@/components/atoms/Typography";
 import Reveal from "@/components/atoms/Reveal";
+import { Butterfly } from "@/components/atoms/Ornaments";
 import { useGsap, inkMask } from "@/lib/useGsap";
 
 type Attendance = "hadir" | "berhalangan" | "ragu";
@@ -307,7 +308,7 @@ export default function Wishes() {
       <div ref={listRef} className="wish-list flex w-full max-w-[340px] flex-col gap-3.5 sm:max-w-[420px] lg:max-w-[500px]">
         {pageWishes.length === 0 && (
           <p className="py-6 text-center font-body text-[15px] text-warm-gray lg:text-[17px]">
-            {loaded ? "Belum ada ucapan. Jadilah yang pertama mengirim doa ✨" : "Memuat ucapan…"}
+            {loaded ? "Belum ada ucapan. Jadilah yang pertama mengirim doa." : "Memuat ucapan…"}
           </p>
         )}
         {pageWishes.map((item) => (
@@ -354,6 +355,9 @@ export default function Wishes() {
         </nav>
       )}
       </Reveal>
+
+      <Butterfly tint="sage" delay={-2} className="bottom-[19%] left-[14%] w-10 lg:bottom-[24%] lg:left-[33%] lg:w-14" />
+      <Butterfly tint="rose" delay={-8} className="hidden lg:block right-[7%] top-[13%] w-12" />
 
       <Reveal variant="blur" className="mt-6 flex w-full justify-center lg:col-span-2" delay={450}>
       <img
