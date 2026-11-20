@@ -1,4 +1,5 @@
 import Typography from "@/components/atoms/Typography";
+import { MusicNotes } from "@/components/atoms/Ornaments";
 import type { CoupleProfileProps } from "@/types";
 
 export default function CoupleProfile({
@@ -7,18 +8,23 @@ export default function CoupleProfile({
   parents,
   align,
   className = "",
-}: CoupleProfileProps) {
+  notesClassName,
+}: CoupleProfileProps & { notesClassName?: string }) {
   const reversed = align === "end";
   return (
     <div
       className={`flex w-full max-w-3xl flex-row items-center gap-6 ${reversed ? "flex-row-reverse" : ""} ${className}`}
     >
-      <img
-        src={image}
-        alt=""
-        aria-hidden="true"
-        className="h-56 w-auto shrink-0 lg:h-72 xl:h-80"
-      />
+      <div className="relative shrink-0">
+        <img
+          src={image}
+          alt=""
+          aria-hidden="true"
+          className="h-56 w-auto lg:h-72 xl:h-80"
+        />
+        {/* Not balok keluar dari headphone saat musik diputar */}
+        {notesClassName && <MusicNotes className={notesClassName} />}
+      </div>
       <div className={`relative flex flex-col gap-2 px-5 lg:gap-3 lg:px-0 lg:top-0 ${reversed ? "top-20" : ""}`}>
         <Typography
           variant="body-bold"

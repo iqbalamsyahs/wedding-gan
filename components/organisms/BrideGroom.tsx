@@ -71,6 +71,7 @@ export default function BrideGroom() {
         parents="Putri pertama dari Bapak Entang Kustandi dan Ibu Diah Rodiah"
         align="start"
         className="bg-profile-start lg:flex-col"
+        notesClassName="left-[78%] top-[12%]"
       />
 
       <div className="relative flex h-30 w-full items-center justify-center lg:h-auto lg:w-auto">
@@ -96,6 +97,7 @@ export default function BrideGroom() {
         parents="Putra kedua dari Bapak Jaja dan Ibu Entin"
         align="end"
         className="bg-profile-end mb-15 flex-row-reverse lg:mb-0 lg:flex-col"
+        notesClassName="left-[86%] top-[9%]"
       />
       </div>
 

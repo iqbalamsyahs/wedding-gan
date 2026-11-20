@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { MusicNotes } from "@/components/atoms/Ornaments";
 
 // Dikirim Cover saat "Buka Undangan" diklik. play() dipanggil di dalam klik itu
 // (dispatchEvent sinkron), jadi browser mengizinkan audio berbunyi.
@@ -34,8 +35,15 @@ export default function MusicPlayer() {
         src="/music/kasih-putih.mp3"
         loop
         preload="none"
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
+        // data-music di <html> menggerakkan not balok di seluruh halaman (globals.css .note)
+        onPlay={() => {
+          setPlaying(true);
+          document.documentElement.dataset.music = "on";
+        }}
+        onPause={() => {
+          setPlaying(false);
+          delete document.documentElement.dataset.music;
+        }}
       />
 
       <button
@@ -60,6 +68,8 @@ export default function MusicPlayer() {
           </span>
           <span className="absolute inset-0 rounded-full bg-[linear-gradient(135deg,rgba(255,255,255,0.18),transparent_45%)]" />
         </span>
+
+        <MusicNotes className="left-1/2 top-1" />
 
         {/* Ikon play saat dijeda */}
         {!playing && (

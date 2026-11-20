@@ -232,3 +232,85 @@ body {
     animation: none;
   }
 }
+
+/* Not balok: berjalan hanya saat <html data-music="on">; saat dijeda memudar dan membeku */
+.notes {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+:root[data-music="on"] .notes {
+  opacity: 1;
+}
+
+.note {
+  opacity: 0;
+  animation: note-rise 3.9s cubic-bezier(0.2, 0.6, 0.4, 1) var(--d, 0s) infinite;
+  animation-play-state: paused;
+}
+
+:root[data-music="on"] .note {
+  animation-play-state: running;
+}
+
+@keyframes note-rise {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(0.6);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.85;
+  }
+  70% {
+    opacity: 0.65;
+  }
+  100% {
+    transform: translate(var(--x), -52px) rotate(var(--r)) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Kelopak melati saat "Buka Undangan": jatuh sekali, bergoyang, berputar, lalu hilang */
+.petal {
+  opacity: 0;
+  /* Bayangan tipis supaya kelopak putih terbaca di atas kertas krem */
+  filter: drop-shadow(0 1.5px 1.5px rgba(85, 71, 64, 0.22));
+  animation: petal-fall var(--dur, 5s) cubic-bezier(0.33, 0.1, 0.6, 1) var(--d, 0s) forwards;
+}
+
+.petal > * {
+  animation: petal-sway calc(var(--dur, 5s) / 2.5) ease-in-out var(--d, 0s) infinite alternate;
+}
+
+@keyframes petal-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(112vh) rotate(var(--rot, 360deg));
+    opacity: 0;
+  }
+}
+
+@keyframes petal-sway {
+  from {
+    transform: translateX(calc(var(--sway, 30px) * -1)) rotateY(0deg);
+  }
+  to {
+    transform: translateX(var(--sway, 30px)) rotateY(55deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notes,
+  .petal {
+    display: none;
+  }
+}

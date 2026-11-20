@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import Typography from "@/components/atoms/Typography";
 import Reveal from "@/components/atoms/Reveal";
-import { Butterfly } from "@/components/atoms/Ornaments";
+import { Butterfly, MusicNotes, PAPER_PLANE_SVG } from "@/components/atoms/Ornaments";
 import { useGsap, inkMask } from "@/lib/useGsap";
 
 type Attendance = "hadir" | "berhalangan" | "ragu";
@@ -53,6 +53,57 @@ function timeAgo(ts: number, now: number) {
 }
 
 const PER_PAGE = 5;
+
+// Ucapan terlipat jadi pesawat kertas: terbang melengkung dari tombol kirim ke atas daftar ucapan.
+// Resolve saat mendarat, supaya kartu baru muncul tepat setelahnya. Langsung resolve bila reduced motion.
+function flyPaperPlane(from: Element | null, to: Element | null): Promise<void> {
+  if (!from || !to || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return Promise.resolve();
+
+  const a = from.getBoundingClientRect();
+  const b = to.getBoundingClientRect();
+  const size = 50;
+  const sx = a.left + a.width / 2 - size / 2;
+  const sy = a.top + a.height / 2 - size / 2;
+  const ex = b.left + b.width / 2 - size / 2;
+  const ey = b.top + 8;
+  // Titik kendali di atas kedua ujung: pesawat naik dulu, lalu menukik ke daftar
+  const cx = (sx + ex) / 2 + 90;
+  const cy = Math.min(sy, ey) - 170;
+
+  const el = document.createElement("div");
+  el.setAttribute("aria-hidden", "true");
+  el.style.cssText = `position:fixed;left:0;top:0;width:${size}px;z-index:60;pointer-events:none`;
+  el.innerHTML = PAPER_PLANE_SVG;
+  document.body.appendChild(el);
+
+  return new Promise((resolve) => {
+    const p = { t: 0 };
+    gsap.to(p, {
+      t: 1,
+      duration: 1.35,
+      ease: "power1.inOut",
+      onUpdate() {
+        const t = p.t;
+        const u = 1 - t;
+        const x = u * u * sx + 2 * u * t * cx + t * t * ex;
+        const y = u * u * sy + 2 * u * t * cy + t * t * ey;
+        const dx = 2 * u * (cx - sx) + 2 * t * (ex - cx);
+        const dy = 2 * u * (cy - sy) + 2 * t * (ey - cy);
+        gsap.set(el, {
+          x,
+          y,
+          rotate: (Math.atan2(dy, dx) * 180) / Math.PI,
+          scale: 1 - 0.35 * t,
+          opacity: t > 0.85 ? (1 - t) / 0.15 : 1,
+        });
+      },
+      onComplete() {
+        el.remove();
+        resolve();
+      },
+    });
+  });
+}
 
 export default function Wishes() {
   const [name, setName] = useState("");
@@ -179,6 +230,10 @@ export default function Wishes() {
     };
 
     setIsSubmitting(true);
+    const landed = flyPaperPlane(
+      (e.currentTarget as HTMLFormElement).querySelector('button[type="submit"]'),
+      listRef.current,
+    );
 
     try {
       if (SHEET_API) {
@@ -197,6 +252,7 @@ export default function Wishes() {
     } catch {
       // Fallback silently if API fails
     } finally {
+      await landed;
       setWishesList((prev) => [newWishItem, ...prev]);
       setPage(0); // ucapan baru tampil di halaman pertama
       setName("");
@@ -298,7 +354,7 @@ export default function Wishes() {
             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
           </svg>
           <span className="font-body text-[18px] font-bold tracking-[-0.02em] lg:text-[22px]">
-            {isSubmitting ? "Sending..." : "Kirim Ucapan"}
+            {isSubmitting ? "Mengirim…" : "Kirim Ucapan"}
           </span>
         </button>
       </form>
@@ -360,11 +416,16 @@ export default function Wishes() {
       <Butterfly tint="rose" delay={-8} className="hidden lg:block right-[7%] top-[13%] w-12" />
 
       <Reveal variant="blur" className="mt-6 flex w-full justify-center lg:col-span-2" delay={450}>
-      <img
-        src="/assets/gan-hani.svg"
-        alt="Gan & Hani"
-        className="wish-art h-auto w-full max-w-[203px] lg:max-w-[280px]"
-      />
+      <div className="relative w-full max-w-[203px] lg:max-w-[280px]">
+        <img
+          src="/assets/gan-hani.svg"
+          alt="Gan & Hani"
+          className="wish-art h-auto w-full"
+        />
+        {/* Not balok dari headphone keduanya saat musik diputar */}
+        <MusicNotes className="left-[12%] top-[9%]" />
+        <MusicNotes className="left-[84%] top-[22%]" />
+      </div>
       </Reveal>
     </section>
   );

@@ -90,3 +90,74 @@ export function Flock({ className = "", offset = 0 }: { className?: string; offs
     </div>
   );
 }
+
+// ---- Not balok: hanya bergerak selama musik diputar (MusicPlayer memasang <html data-music="on">) ----
+
+function Note({ beamed }: { beamed?: boolean }) {
+  return beamed ? (
+    <svg viewBox="0 0 22 20" className="h-auto w-full overflow-visible">
+      <ellipse cx="4.6" cy="16" rx="3.4" ry="2.5" transform="rotate(-20 4.6 16)" fill={INK} />
+      <ellipse cx="15.6" cy="14" rx="3.4" ry="2.5" transform="rotate(-20 15.6 14)" fill={INK} />
+      <path d="M7.7 15.2V4.4M18.7 13.2V2.4" stroke={INK} strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M7.7 4.6 18.7 2.6" stroke={INK} strokeWidth="2.4" strokeLinecap="round" />
+    </svg>
+  ) : (
+    <svg viewBox="0 0 14 20" className="h-auto w-full overflow-visible">
+      <ellipse cx="4.6" cy="16" rx="3.4" ry="2.5" transform="rotate(-20 4.6 16)" fill={INK} />
+      <path d="M7.7 15.2V2.6c1.4 2.6 4.4 3.2 4.6 6.6" stroke={INK} strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+// Tiga not bergantian naik dari satu titik (headphone / piringan), arah & putaran berbeda
+const NOTES = [
+  { beamed: false, d: 0, x: "-22px", r: "-16deg", w: "w-3" },
+  { beamed: true, d: 1.3, x: "16px", r: "12deg", w: "w-4.5" },
+  { beamed: false, d: 2.6, x: "-6px", r: "20deg", w: "w-2.5" },
+];
+
+export function MusicNotes({ className = "" }: { className?: string }) {
+  return (
+    <div aria-hidden="true" className={`notes pointer-events-none absolute h-0 w-0 ${className}`}>
+      {NOTES.map((n, i) => (
+        <span
+          key={i}
+          className={`note absolute bottom-0 left-0 ${n.w}`}
+          style={{ "--d": `${n.d}s`, "--x": n.x, "--r": n.r } as CSSProperties}
+        >
+          <Note beamed={n.beamed} />
+        </span>
+      ))}
+    </div>
+  );
+}
+
+// ---- Pesawat kertas & kelopak melati (dipakai imperatif / oleh PetalShower) ----
+
+export const PAPER_PLANE_SVG = `<svg viewBox="0 0 32 24" fill="none" stroke="${INK}" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" style="width:100%;height:auto;overflow:visible"><path d="M2 3 30 12 2 21 8 12Z" fill="#fbf7ee"/><path d="M8 12h22M8 12l4 7.5"/></svg>`;
+
+export function Jasmine({ petal }: { petal?: boolean }) {
+  if (petal)
+    return (
+      <svg viewBox="0 0 10 18" className="h-auto w-full overflow-visible">
+        <path d="M5 1C8.6 4.6 8.4 12.4 5 17 1.6 12.4 1.4 4.6 5 1Z" fill="#fffdf7" stroke={INK} strokeOpacity="0.7" strokeWidth="0.8" />
+        <path d="M5 4.5v9" stroke={INK} strokeOpacity="0.2" strokeWidth="0.5" />
+      </svg>
+    );
+  return (
+    <svg viewBox="0 0 20 20" className="h-auto w-full overflow-visible">
+      {[0, 72, 144, 216, 288].map((deg) => (
+        <path
+          key={deg}
+          d="M10 10C7.6 7.2 7.8 2.6 10 .9c2.2 1.7 2.4 6.3 0 9.1Z"
+          transform={`rotate(${deg} 10 10)`}
+          fill="#fffdf7"
+          stroke={INK}
+          strokeOpacity="0.7"
+          strokeWidth="0.7"
+        />
+      ))}
+      <circle cx="10" cy="10" r="1.6" fill="#c9c58f" />
+    </svg>
+  );
+}

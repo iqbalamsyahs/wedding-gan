@@ -9,6 +9,7 @@ import WeddingEvent from "@/components/organisms/WeddingEvent";
 import QuranVerse from "@/components/organisms/QuranVerse";
 import Wishes from "@/components/organisms/Wishes";
 import MusicPlayer from "@/components/molecules/MusicPlayer";
+import PetalShower from "@/components/molecules/PetalShower";
 
 export default function WeddingInvitation({ guest }: { guest?: string }) {
   return (
@@ -32,6 +33,7 @@ export default function WeddingInvitation({ guest }: { guest?: string }) {
         </main>
       </SmoothScroll>
       <MusicPlayer />
+      <PetalShower />
     </>
   );
 }
