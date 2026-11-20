@@ -27,27 +27,39 @@ const LABELS: [keyof Vals, string][] = [
 ];
 
 // Satu digit: kolom angka 0–9 yang bergeser vertikal ke digit baru (efek odometer).
-// digit null = belum ada waktu (render server), kolom diam di 0 agar HTML awal sama.
-function RollDigit({ digit }: { digit: number | null }) {
+// Semua gerak kolom dipegang di sini, jadi posisinya selalu mengikuti digit terbaru.
+// Sebelum `live` (section belum terlihat) kolom ditahan di 9; saat live, berputar ke digitnya.
+function RollDigit({ digit, live, order }: { digit: number | null; live: boolean; order: number }) {
   const column = useRef<HTMLSpanElement>(null);
-  const mounted = useRef(false);
+  const rolled = useRef(false);
 
   useLayoutEffect(() => {
     const el = column.current;
     if (!el || digit === null) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!mounted.current || reduce) {
+    if (reduce) {
       gsap.set(el, { yPercent: -digit * 10 });
-      mounted.current = true;
       return;
     }
-    gsap.to(el, { yPercent: -digit * 10, duration: 0.9, ease: "expo.out", overwrite: true });
-  }, [digit]);
+    if (!live) {
+      gsap.set(el, { yPercent: -90 });
+      return;
+    }
+    const intro = !rolled.current;
+    rolled.current = true;
+    gsap.to(el, {
+      yPercent: -digit * 10,
+      duration: intro ? 1.8 : 0.9,
+      delay: intro ? 0.2 + order * 0.1 : 0,
+      ease: "expo.out",
+      overwrite: true,
+    });
+  }, [digit, live, order]);
 
   return (
     <span className="relative inline-block h-[1em] overflow-hidden align-top leading-none">
-      <span ref={column} data-digit={digit ?? 0} className="cd-col flex flex-col">
+      <span ref={column} className="flex flex-col">
         {Array.from({ length: 10 }, (_, n) => (
           <span key={n} className="block h-[1em] leading-none">
             {n}
@@ -58,12 +70,17 @@ function RollDigit({ digit }: { digit: number | null }) {
   );
 }
 
-function RollNumber({ value }: { value: number | null }) {
+function RollNumber({ value, live, order }: { value: number | null; live: boolean; order: number }) {
   const digits = value === null ? ["0", "0"] : String(value).padStart(2, "0").split("");
   return (
     <span className="inline-flex tabular-nums">
       {digits.map((d, i) => (
-        <RollDigit key={i} digit={value === null ? null : Number(d)} />
+        <RollDigit
+          key={i}
+          digit={value === null ? null : Number(d)}
+          live={live}
+          order={order + i}
+        />
       ))}
     </span>
   );
@@ -71,6 +88,7 @@ function RollNumber({ value }: { value: number | null }) {
 
 export default function Countdown() {
   const [vals, setVals] = useState<Vals | null>(null);
+  const [live, setLive] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -79,44 +97,33 @@ export default function Countdown() {
     return () => clearInterval(id);
   }, []);
 
-  // Intro: setiap unit masuk dengan blur, lalu semua digit berputar dari 9 ke nilainya
+  // Intro: setiap unit masuk dengan blur; `live` memicu RollDigit berputar dari 9 ke nilainya
   useGsap(rootRef, (root) => {
-    const trigger = { trigger: root, start: "top 85%", once: true };
-    const cols = root.querySelectorAll<HTMLElement>(".cd-col");
-
-    gsap
-      .timeline({ scrollTrigger: trigger })
-      .from(root.querySelectorAll(".cd-unit"), {
-        y: 36,
-        autoAlpha: 0,
-        filter: "blur(8px)",
-        stagger: 0.14,
-        duration: 1.2,
-        ease: "power3.out",
-      }, 0)
-      .fromTo(
-        cols,
-        { yPercent: -90 },
-        {
-          yPercent: (_, el: HTMLElement) => -Number(el.dataset.digit) * 10,
-          duration: 1.8,
-          ease: "expo.out",
-          stagger: 0.1,
-          immediateRender: false,
-        },
-        0.2,
-      );
+    gsap.from(root.querySelectorAll(".cd-unit"), {
+      y: 36,
+      autoAlpha: 0,
+      filter: "blur(8px)",
+      stagger: 0.14,
+      duration: 1.2,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: root,
+        start: "top 85%",
+        once: true,
+        onEnter: () => setLive(true),
+      },
+    });
   });
 
   return (
     <div ref={rootRef} className="flex items-center justify-center gap-9 lg:gap-14">
-      {LABELS.map(([key, label]) => (
+      {LABELS.map(([key, label], u) => (
         <div key={key} className="cd-unit flex flex-col items-center">
           <Typography
             variant="body-bold"
             className="text-[32px] leading-none text-[#934646] tracking-[-0.02em] lg:text-[40px]"
           >
-            <RollNumber value={vals ? vals[key] : null} />
+            <RollNumber value={vals ? vals[key] : null} live={live} order={u * 2} />
           </Typography>
           <Typography
             variant="body-bold"

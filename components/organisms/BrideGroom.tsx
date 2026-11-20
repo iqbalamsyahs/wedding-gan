@@ -64,7 +64,7 @@ export default function BrideGroom() {
       <CoupleProfile
         image="/assets/bride_groom/hani.svg"
         name="Hanifah Sartika Julianti"
-        parents="Putri .... dari Bapak .... dan Ibu ....."
+        parents="Putri pertama dari Bapak Entang Kustandi dan Ibu Diah Rodiah"
         align="start"
         className="bg-profile-start lg:flex-col"
       />
@@ -89,7 +89,7 @@ export default function BrideGroom() {
         name={<>
           <span>Gan Gan</span><br/><span>Ahmad Setriawan</span>
         </>}
-        parents="Putri .... dari Bapak .... dan Ibu ....."
+        parents="Putra kedua dari Bapak Jaja dan Ibu Entin"
         align="end"
         className="bg-profile-end mb-15 flex-row-reverse lg:mb-0 lg:flex-col"
       />

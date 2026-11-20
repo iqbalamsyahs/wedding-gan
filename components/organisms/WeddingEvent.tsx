@@ -164,9 +164,7 @@ export default function WeddingEvent() {
 
             <div aria-hidden="true" className="event-calendar relative h-35 w-35.25 lg:h-44 lg:w-44">
               <img src="/assets/weeding_event/calendar.svg" alt="" className="h-full w-full" />
-              {/* Lingkaran merah penanda tanggal 29 */}
-              <span className="absolute left-[65%] top-[80%] h-[13%] w-[15%] -translate-x-1/2 -translate-y-1/2 -rotate-12 rounded-[50%] border-2 border-[#c0392b]" />
-            </div>
+              </div>
           </div>
 
           <Countdown />
@@ -175,7 +173,7 @@ export default function WeddingEvent() {
       </Reveal>
 
       <Reveal className="flex w-full justify-center" delay={300}>
-      <div className="event-cards flex w-full max-w-92.25 items-center justify-between lg:max-w-[560px] lg:gap-6 xl:max-w-[620px]">
+      <div className="event-cards flex w-full mt-5 max-w-92.25 items-center justify-between lg:max-w-[560px] lg:gap-6 xl:max-w-[620px]">
         <div className="event-card-akad flex flex-col items-center gap-1">
           <img
             src="/assets/weeding_event/hani-event.svg"
@@ -233,7 +231,7 @@ export default function WeddingEvent() {
           variant="body-bold"
           className="text-[24px] text-olive-dark tracking-[-0.02em]"
         >
-          Tempat
+          Kedai Selasih
         </Typography>
 
         <div className="event-place flex items-start gap-2">
@@ -241,13 +239,15 @@ export default function WeddingEvent() {
           variant="body-bold"
           className="max-w-75 text-center text-[14px] leading-5.75 text-olive-dark tracking-[-0.02em] lg:max-w-[420px] lg:text-[18px]"
         >
-          [Nama Gedung]
-          <br />
-          [Alamat lengkap, Kota]
+          Jl. Cikutra Baru VI No.34, Neglasari, Kec. Cibeunying Kaler, Kota Bandung, Jawa Barat 40124
         </Typography>
         </div>
 
-        <button className="event-cta flex items-center gap-4 rounded-button bg-olive-dark px-6 py-2 my-5 text-[#f5f1e8] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-dark lg:px-8 lg:py-3">
+        <a
+          href="https://maps.app.goo.gl/9Dj6ScfW5mLkqxye7"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="event-cta flex items-center gap-4 rounded-button bg-olive-dark px-6 py-2 my-5 text-[#f5f1e8] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-olive-dark lg:px-8 lg:py-3">
           <img
             src="/assets/weeding_event/pinpoint-button.svg"
             alt=""
@@ -257,7 +257,7 @@ export default function WeddingEvent() {
           <span className="font-body text-[20px] font-bold tracking-[-0.02em] lg:text-[24px]">
             Buka Lokasi
           </span>
-        </button>
+        </a>
       </div>
       </Reveal>
 
