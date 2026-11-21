@@ -194,7 +194,7 @@ export default function WeddingEvent() {
             variant="body-bold"
             className="text-[20px] text-burgundy tracking-[-0.02em] lg:text-[24px]"
           >
-            08.00 - Selesai
+            08.00 - 10.00
           </Typography>
         </div>
 
@@ -215,7 +215,7 @@ export default function WeddingEvent() {
             variant="body-bold"
             className="text-[20px] text-burgundy tracking-[-0.02em] lg:text-[24px]"
           >
-            11.00 - Selesai
+            10.00 - Selesai
           </Typography>
         </div>
       </div>
