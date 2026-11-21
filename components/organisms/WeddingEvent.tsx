@@ -194,7 +194,7 @@ export default function WeddingEvent() {
             variant="body-bold"
             className="text-[20px] text-burgundy tracking-[-0.02em] lg:text-[24px]"
           >
-            09.00 - Selesai
+            08.00 - Selesai
           </Typography>
         </div>
 
